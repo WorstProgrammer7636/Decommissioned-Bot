@@ -28,13 +28,19 @@ public class Translate extends ListenerAdapter {
 
         String[] message = after.split(" ");
         if (message[0].equalsIgnoreCase("-translate") && message.length == 1){
-            command.getChannel().sendMessage("This is the translate command! Please type -translate [language abv] [word/sentence]\n For example: [-translate es please do the" +
-                    " dishes] will translate 'please do the dishes' into spanish\n ").queue();
+            EmbedBuilder description = new EmbedBuilder();
+            description.setTitle("TRANSLATE COMMAND");
+            description.addField("Info", "This is the translate command! Please type " +
+                    "-translate [language abv] [word/sentence]\n For example: [-translate es please do the" +
+                    " dishes] will translate 'please do the dishes' into spanish\n ", false);
 
-            command.getChannel().sendMessage("LIST OF POPULAR LANGUAGE ABVs\n en - ENGLISH\n es - SPANISH\n fr - FRENCH\n zh - CHINESE\n ko - KOREAN\n " +
+            description.setDescription("LIST OF POPULAR LANGUAGE ABVs\n en - ENGLISH\n es - SPANISH\n fr - FRENCH\n zh - CHINESE\n ko - KOREAN\n " +
                     "el - GREEK\n ja - JAPANESE\n ru - RUSSIAN \n ar - ARABIC\n ------ \n TO VIEW MORE LANGUAGES: GO HERE:\n " +
                     "(NOTE: SOME ABBREVIATIONS NO LONGER EXIST OR WORK)\n" +
-                    "https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes#BR\n").queue();
+                    "https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes#BR\n");
+
+            command.getChannel().sendMessage(description.build()).queue();
+            description.clear();
         } else if (message[0].equalsIgnoreCase("-translate") && message.length >= 2){
             String sentence = "";
 
@@ -52,7 +58,6 @@ public class Translate extends ListenerAdapter {
                 }
 
                 if (languageFound){
-                    command.getChannel().sendMessage("Translating from " + GoogleTranslate.detectLanguage(sentence) + " to " + message[1]);
                     command.getChannel().sendMessage(GoogleTranslate.translate(message[1], sentence)).queue();
                 } else {
                     command.getChannel().sendMessage("Language not found. You can view the currently available languages by typing -translate").queue();
