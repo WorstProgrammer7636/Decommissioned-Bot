@@ -15,7 +15,6 @@ public class Translate extends ListenerAdapter {
         String after = orgmessage.trim().replaceAll(" +", " ");
         EmbedBuilder info = new EmbedBuilder();
 
-
         //language array (note: some language abvs are deprecated or no longer existent)
         String[] languages = {"en", "es", "fr", "zh", "ko", "el", "ja", "ru", "ar", "aa", "ab", "ae", "af", "ak", "am", "an",
                 "ar", "as", "av", "ay", "az", "ba", "be", "bg", "bh", "bi", "bm", "bn", "bo", "br", "bs", "ca", "ce", "ch", "co", "cr", "cs", "cu", "cv",
