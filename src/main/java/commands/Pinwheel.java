@@ -2,6 +2,7 @@ package commands;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
 //ORIGINAL SOURCE: UCSD(University of California San Diego) CSE ASSIGNMENT
 public class Pinwheel extends ListenerAdapter {
 
