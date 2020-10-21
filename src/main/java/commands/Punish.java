@@ -21,6 +21,11 @@ public class Punish extends ListenerAdapter{
                 TextChannel textChannel = event.getGuild().getTextChannelsByName("log", true).get(0);
 
                 int length = spliced.length;
+                if (length == 1){
+                    channel.sendMessage("You gotta tell me who to mute man. Just do -mute @<user> <reason> (reason is optional)")
+                            .queue();
+                    return;
+                }
                 if (length >= 2) {
                     if (length == 2) {
                         if (spliced[1].startsWith("<@")) {
