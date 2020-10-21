@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.awt.*;
 import java.util.Arrays;
 
 public class HelloEvent extends ListenerAdapter {
@@ -39,7 +40,7 @@ public class HelloEvent extends ListenerAdapter {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("INFORMATION");
             info.addField("Creators", "hold up#7636 & Nard#8888", false);
-            info.setColor(0xf45642);
+            info.setColor(Color.BLUE);
             info.setDescription("Welcome and thanks for using Inutile! If you would like to view commands, type -commands");
             info.setFooter("Created by hold up and 0Nard", event.getMember().getUser().getAvatarUrl());
             event.getChannel().sendTyping().queue();
@@ -52,11 +53,12 @@ public class HelloEvent extends ListenerAdapter {
             //update as more functions are added
             justTitle.setTitle("LIST OF COMMANDS");
             event.getChannel().sendMessage(justTitle.build()).queue();
-            event.getChannel().sendMessage("```\n -calculate \n -piglatin \n -translate```").queue();
+            event.getChannel().sendMessage("```\n -commands \n -info \n -calculate \n -piglatin \n -translate \n " +
+                    "-DM```").queue();
 
             justTitle.setTitle("ADMINISTRATOR COMMANDS");
             event.getChannel().sendMessage(justTitle.build()).queue();
-            event.getChannel().sendMessage("```\n -mute \n -unmute```").queue();
+            event.getChannel().sendMessage("```\n -mute \n -tempmute \n -hardmute \n -unmute```").queue();
 
         }
     }
