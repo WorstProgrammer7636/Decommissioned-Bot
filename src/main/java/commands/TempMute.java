@@ -1,5 +1,6 @@
 package commands;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,6 @@ public class TempMute extends ListenerAdapter {
 
                 String[] spliced = content.split("\\s+");
                 TextChannel textChannel = event.getGuild().getTextChannelsByName("log", true).get(0);
-
                 int length = spliced.length;
                 if (length >= 3) {
                     if (length == 3) {

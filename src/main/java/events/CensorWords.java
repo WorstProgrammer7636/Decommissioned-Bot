@@ -20,11 +20,11 @@ public class CensorWords extends ListenerAdapter {
 
         //Work on duplicate char case later
         if (newstring.contains("nigger") || newstring.contains("nigga")) {
-            event.getChannel().sendMessage("yo dude don't say nasty words @" + event.getMember().getEffectiveName()).queue();
+            event.getChannel().sendMessage("Do not say that @" + event.getMember().getEffectiveName()).queue();
             event.getMessage().delete().queue();
         }
         else if (newstring.contains("chingchong") ) {
-            event.getChannel().sendMessage("yo dude don't say nasty words @" + event.getMember().getEffectiveName()).queue();
+            event.getChannel().sendMessage("Do not say that @" + event.getMember().getEffectiveName()).queue();
             event.getMessage().delete().queue();
         }
 
