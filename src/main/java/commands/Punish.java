@@ -1,6 +1,7 @@
 package commands;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -24,7 +25,7 @@ public class Punish extends ListenerAdapter {
 	}
 	public void onMessageReceived(MessageReceivedEvent event) {
 		Message message = event.getMessage();
-		long user = event.getMember().getUser().getIdLong();
+		long user = Objects.requireNonNull(event.getMember()).getUser().getIdLong();
 		String content = message.getContentRaw();
 		MessageChannel channel = event.getChannel();
 		String reason = "";
@@ -49,7 +50,7 @@ public class Punish extends ListenerAdapter {
 								} else if (RoleFind(mentionedMember)) {
 									channel.sendMessage("This person was already muted!").queue();
 								} else {
-									
+
 									channel.sendMessage("Are you sure? Type 'yes' in this channel to confirm this permmute.").queue();;
 									initWaiter(channelID, user, event.getJDA().getShardManager(), role, mentionedMember, textChannel, "None", channel);
 								}
@@ -105,22 +106,22 @@ public class Punish extends ListenerAdapter {
 		waiter.waitForEvent(MessageReceivedEvent.class, (event) -> {
 			long nchannel = event.getChannel().getIdLong();
 			long nuser = event.getMember().getUser().getIdLong();
-			
-			return channel == nchannel && user == nuser && event.getMessage().getContentRaw().equalsIgnoreCase("yes");
-			}, (event)->{
-				event.getGuild().addRoleToMember(member, role).queue();
-				EmbedBuilder info = new EmbedBuilder();
-				info.setTitle("NEW PERMMUTE");
-				info.addField("Info:", member.getEffectiveName() + " was muted by "
-						+ event.getMember().getEffectiveName(), false);
-				info.addField("Reason Given:", reason, false);
-				info.setColor(0xeb3434);
-				info.setFooter(event.getMember().getUser().getAsTag());
-				log.sendMessage(info.build()).queue();
-				event.getChannel().sendMessage("Mute successful! :white_check_mark:").queue();
-				
-			}, 10, TimeUnit.SECONDS, () -> {
-				sendchannel.sendMessage("You didn't respond with 'yes' in time! Retry the command if you want to mute someone.").queue();;
-			});
+
+			return (channel == nchannel) && (user == nuser && event.getMessage().getContentRaw().equalsIgnoreCase("yes"));
+		}, (event)->{
+			event.getGuild().addRoleToMember(member, role).queue();
+			EmbedBuilder info = new EmbedBuilder();
+			info.setTitle("NEW PERMMUTE");
+			info.addField("Info:", member.getEffectiveName() + " was muted by "
+					+ event.getMember().getEffectiveName(), false);
+			info.addField("Reason Given:", reason, false);
+			info.setColor(0xeb3434);
+			info.setFooter(event.getMember().getUser().getAsTag());
+			log.sendMessage(info.build()).queue();
+			event.getChannel().sendMessage("Mute successful! :white_check_mark:").queue();
+
+		}, 10, TimeUnit.SECONDS, () -> {
+			sendchannel.sendMessage("You didn't respond with 'yes' in time! Retry the command if you want to mute someone.").queue();;
+		});
 	}
 }
