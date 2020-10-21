@@ -17,15 +17,13 @@ public class BotDM extends ListenerAdapter {
         String content = message.getContentRaw();
         String[] spliced = content.split("\\s+");
 
-        
         Member member = e.getMember();
 
         if (spliced.length == 1 && spliced[0].equalsIgnoreCase("-DM")){
             member.getUser().openPrivateChannel().queue(channel -> {
-                channel.sendMessage("I'm going to literally spam you").queue();
+                channel.sendMessage("Gday Gday! This is inutile customer service. How can I help?").queue();
             });
         }
-
 
     }
 }
