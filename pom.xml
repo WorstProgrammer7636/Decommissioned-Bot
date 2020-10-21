@@ -37,6 +37,13 @@
             <artifactId>JDA</artifactId>
             <version>4.2.0_209</version>
         </dependency>
+        <dependency>
+            <groupId>com.jagrosh</groupId>
+            <artifactId>jda-utilities</artifactId>
+            <version>3.0.4</version>
+            <scope>compile</scope>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
 </project>
