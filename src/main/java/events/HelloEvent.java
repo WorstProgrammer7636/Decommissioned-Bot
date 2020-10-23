@@ -54,7 +54,7 @@ public class HelloEvent extends ListenerAdapter {
             justTitle.setTitle("LIST OF COMMANDS");
             event.getChannel().sendMessage(justTitle.build()).queue();
             event.getChannel().sendMessage("```\n -commands \n -info \n -calculate \n -piglatin \n -translate \n " +
-                    "-DM```").queue();
+                    "-DM \n -meme```").queue();
 
             justTitle.setTitle("ADMINISTRATOR COMMANDS");
             event.getChannel().sendMessage(justTitle.build()).queue();
