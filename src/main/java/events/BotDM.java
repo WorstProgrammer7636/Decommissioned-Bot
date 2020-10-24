@@ -13,6 +13,7 @@ public class BotDM extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e){
+        /*
         Message message = e.getMessage();
         String content = message.getContentRaw();
         String[] spliced = content.split("\\s+");
@@ -24,6 +25,6 @@ public class BotDM extends ListenerAdapter {
                 channel.sendMessage("Gday Gday! This is inutile customer service. How can I help?").queue();
             });
         }
-
+        */
     }
 }
