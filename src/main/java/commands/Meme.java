@@ -1,68 +1,48 @@
 package commands;
 
+import java.awt.Color;
+import java.util.Random;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.web.WebUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import javax.annotation.Nonnull;
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class Meme extends ListenerAdapter {
-
-    @Override
-    public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent e){
-        String[] spliced = e.getMessage().getContentRaw().split(" ");
-
-        JSONParser parser = new JSONParser();
-        String postLink = "";
-        String title = "";
-        String url = "";
-
-        if (spliced[0].equalsIgnoreCase("-meme")){
-            try {
-                URL memeUrl = new URL("https://meme-api.herokuapp.com/gimme");
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(memeUrl.openConnection().getInputStream()));
-
-                String lines;
-                while ((lines = bufferedReader.readLine()) != null){
-                    JSONArray array = new JSONArray();
-                    array.add(parser.parse(lines));
-
-                    for (Object o : array){
-                        JSONObject jsonObject = (JSONObject) o;
-
-                        postLink = (String)jsonObject.get("postLink");
-                        title = (String) jsonObject.get("title");
-                        url = (String) jsonObject.get("url");
-                    }
-
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        TextChannel channel = event.getChannel();
+        String message = event.getMessage().getContentRaw();
+        if (message.equalsIgnoreCase("-meme")) {
+            WebUtils.ins.getJSONObject("https://apis.duncte123.me/meme").async((json) -> {
+                if (!json.get("success").asBoolean()) {
+                    channel.sendMessage("Something went wrong, try again later!").queue();
+                    System.out.println(json);
+                    return;
                 }
-                bufferedReader.close();
+                int R = (int)(Math.random()*256);
+                int G = (int)(Math.random()*256);
+                int B= (int)(Math.random()*256);
+                Color color = new Color(R, G, B); //random color, but can be bright or dull
 
-                EmbedBuilder builder = new EmbedBuilder().setTitle(title, postLink).setImage(url).setColor(Color.ORANGE);
-                e.getChannel().sendMessage(builder.build()).queue();
+                //to get rainbow, pastel colors
+                Random random = new Random();
+                final float hue = random.nextFloat();
+                final float saturation = 0.9f;//1.0 for brilliant, 0.0 for dull
+                final float luminance = 1.0f; //1.0 for brighter, 0.0 for black
+                color = Color.getHSBColor(hue, saturation, luminance);
 
-            } catch (MalformedURLException malformedURLException) {
-                malformedURLException.printStackTrace();
-                e.getChannel().sendMessage("Whoops. Looks like something went wrong! Please try again later").queue();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-                e.getChannel().sendMessage("Whoops. Looks like something went wrong! Please try again later").queue();
-            } catch (ParseException parseException) {
-                parseException.printStackTrace();
-                e.getChannel().sendMessage("Whoops. Looks like something went wrong! Please try again later").queue();
-            }
+                final JsonNode data = json.get("data");
+                final String title = data.get("title").asText();
+                final String url = data.get("url").asText();
+                final String image = data.get("image").asText();
+                final EmbedBuilder embed = EmbedUtils.embedImageWithTitle(title, url, image);
+                embed.setColor(color);
+                channel.sendMessage(embed.build()).queue();
+            });
         }
     }
 }
