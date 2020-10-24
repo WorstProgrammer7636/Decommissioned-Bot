@@ -37,7 +37,7 @@ public class RickRoll extends ListenerAdapter {
                 for (Member m : mentionedMembers){
                     try {
                         Member me = mentionedMembers.get(0);
-                        me.getUser().openPrivateChannel().complete().sendMessage("Ay yo watch this video, it's really funny i guarantee you \n <https://www.youtube.com/watch?v=NfSGm9DDQ3o>").queue();
+                        me.getUser().openPrivateChannel().complete().sendMessage("Inutile Developer Face Reveal Video: \n <https://www.youtube.com/watch?v=NfSGm9DDQ3o>").queue();
                     } catch (UnsupportedOperationException e){
                         event.getChannel().sendMessage("You can't rickroll me bitch!").queue();
                     }
