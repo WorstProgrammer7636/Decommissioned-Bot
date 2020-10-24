@@ -25,7 +25,7 @@ public class Punish extends ListenerAdapter {
 	}
 	public void onMessageReceived(MessageReceivedEvent event) {
 		Message message = event.getMessage();
-		long user = Objects.requireNonNull(event.getMember()).getUser().getIdLong();
+		long user = event.getMember().getUser().getIdLong();
 		String content = message.getContentRaw();
 		MessageChannel channel = event.getChannel();
 		String reason = "";
