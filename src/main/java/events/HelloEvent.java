@@ -39,26 +39,17 @@ public class HelloEvent extends ListenerAdapter {
         if (messageSent.equalsIgnoreCase("-info")){
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("INFORMATION");
-            info.addField("Creators", "hold up#7636 & Nard#8888", false);
             info.setColor(Color.BLUE);
-            info.setDescription("Welcome and thanks for using Inutile! If you would like to view commands, type -commands");
-            info.setFooter("Created by hold up and 0Nard", event.getMember().getUser().getAvatarUrl());
-            event.getChannel().sendTyping().queue();
+            info.setDescription("Welcome and thanks for using Inutile! Below are all the commands! You can simply type those commands the bot" +
+                    " will give you further instructions on how to use the commands");
+            info.setFooter("Created by hold up and Nard", event.getMember().getUser().getAvatarUrl());
+            //update as more functions are added
+            info.addField("LIST OF COMMANDS", "```\n -info \n -calculate \n -piglatin \n -translate \n -meme \n -rickroll```", false);
+            info.addField("ADMINISTRATOR COMMANDS", "```\n -mute \n -tempmute \n -hardmute \n -unmute```", false);
+            info.addField("GOT ANY MORE QUESTIONS OR SUGGESTIONS?", "Join our community and help server! \n https://discord.gg/RVT8ywu \n" +
+                    "\n Invite this bot to your own servers: https://discord.com/api/oauth2/authorize?client_id=765713285965807657&permissions=0&scope=bot", false);
             event.getChannel().sendMessage(info.build()).queue();
             info.clear();
-        }
-
-        if (messageSent.equalsIgnoreCase("-commands")){
-            EmbedBuilder justTitle = new EmbedBuilder();
-            //update as more functions are added
-            justTitle.setTitle("LIST OF COMMANDS");
-            event.getChannel().sendMessage(justTitle.build()).queue();
-            event.getChannel().sendMessage("```\n -commands \n -info \n -calculate \n -piglatin \n -translate \n " +
-                    "-DM \n -meme \n -rickroll```").queue();
-
-            justTitle.setTitle("ADMINISTRATOR COMMANDS");
-            event.getChannel().sendMessage(justTitle.build()).queue();
-            event.getChannel().sendMessage("```\n -mute \n -tempmute \n -hardmute \n -unmute```").queue();
 
         }
     }
