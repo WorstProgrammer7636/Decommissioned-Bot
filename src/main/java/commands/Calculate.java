@@ -17,7 +17,7 @@ public class Calculate extends ListenerAdapter {
 
         if (message[0].equalsIgnoreCase("-calculate") && message.length == 1){
             event.getChannel().sendMessage("To use this command, type(without brackets): !calculate " +
-                    "[add/sub/mult/divide/exp/sqrt] [firstnum] [secondnum]").queue();
+                    "[add/sub/mult/divide/exp/sqrt/log] [firstnum] [secondnum]").queue();
         } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("add")){
 
             if (message.length == 3){
@@ -121,22 +121,23 @@ public class Calculate extends ListenerAdapter {
             } catch (NumberFormatException e){
                 event.getChannel().sendMessage("Just stop").queue();
             }
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("sqrt")){
+        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("root")){
 
-            if (message.length > 3){
-                event.getChannel().sendMessage("You can only input one number! Type in the format: -calculate sqrt [number]").queue();
+            if (message.length > 4){
+                event.getChannel().sendMessage("You can only input two numbes! Type in the format: -calculate root [number][rootNum]").queue();
                 return;
             }
             try {
                 double number = Double.parseDouble(message[2]);
-
-                double answer = Math.sqrt(number);
-                event.getChannel().sendMessage("The square root of " + number + " is " + answer).queue();
+                double rootNum = Double.parseDouble(message[3]);
+                double converted = 1 / rootNum;
+                double answer = Math.pow(number, converted);
+                event.getChannel().sendMessage("The answer is " + answer).queue();
             } catch (ArrayIndexOutOfBoundsException e){
-                event.getChannel().sendMessage("Can you tell me the number you want me to square root?").queue();
+                event.getChannel().sendMessage("Can you tell me the number and the root?").queue();
                 return;
             } catch (NumberFormatException e){
-                event.getChannel().sendMessage("Please type an integer.").queue();
+                event.getChannel().sendMessage("Please type only integers.").queue();
                 return;
             }
         } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("exp")){
@@ -191,7 +192,7 @@ public class Calculate extends ListenerAdapter {
                     return;
                 }
 
-                if (number < 0){
+                if (number <= 0){
                     event.getChannel().sendMessage("Really? Do you really think I'm that stupid?").queue();
                     return;
                 }
