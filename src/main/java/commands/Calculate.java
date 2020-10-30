@@ -145,6 +145,9 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate sqrt [number][exponent]").queue();
                 return;
             }
+
+
+
             try {
                 double number = Double.parseDouble(message[2]);
                 double exponent = Double.parseDouble(message[3]);
@@ -160,7 +163,51 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("Can you tell me the number you want me to power?").queue();
                 return;
             } catch (NumberFormatException e){
-                event.getChannel().sendMessage("Please type an integer.").queue();
+                event.getChannel().sendMessage("Please type a number.").queue();
+                return;
+            }
+        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("log")){
+
+            if (message.length > 4){
+                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate log [base][logNumber]").queue();
+                return;
+            }
+
+
+            try {
+                double base = Double.parseDouble(message[2]);
+                double number = Double.parseDouble(message[3]);
+
+                double answer = (Math.log(number)) / Math.log(base);
+
+                //error cases
+                if (base == 1 && number >= 1){
+                    event.getChannel().sendMessage("Sorry mate you can't do that").queue();
+                    return;
+                }
+
+                if (base == 0){
+                    event.getChannel().sendMessage("Really? Do you really think I'm that stupid?").queue();
+                    return;
+                }
+
+                if (number < 0){
+                    event.getChannel().sendMessage("Really? Do you really think I'm that stupid?").queue();
+                    return;
+                }
+
+                if (Double.isInfinite(answer)){
+                    event.getChannel().sendMessage("The numbers you entered were too big,").queue();
+                    return;
+                }
+
+
+                event.getChannel().sendMessage("The answer is " + answer).queue();
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("Can you tell me the number you want me to log? Type in the format: -calculate log [base][logNumber]").queue();
+                return;
+            } catch (NumberFormatException e){
+                event.getChannel().sendMessage("Please type only numbers.").queue();
                 return;
             }
         }
