@@ -17,7 +17,7 @@ public class Calculate extends ListenerAdapter {
 
         if (message[0].equalsIgnoreCase("-calculate") && message.length == 1){
             event.getChannel().sendMessage("To use this command, type(without brackets): !calculate " +
-                    "[add/sub/mult/divide] [firstnum] [secondnum]").queue();
+                    "[add/sub/mult/divide/exp/sqrt] [firstnum] [secondnum]").queue();
         } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("add")){
 
             if (message.length == 3){
@@ -120,6 +120,48 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("Don't do that").queue();
             } catch (NumberFormatException e){
                 event.getChannel().sendMessage("Just stop").queue();
+            }
+        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("sqrt")){
+
+            if (message.length > 3){
+                event.getChannel().sendMessage("You can only input one number! Type in the format: -calculate sqrt [number]").queue();
+                return;
+            }
+            try {
+                double number = Double.parseDouble(message[2]);
+
+                double answer = Math.sqrt(number);
+                event.getChannel().sendMessage("The square root of " + number + " is " + answer).queue();
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("Can you tell me the number you want me to square root?").queue();
+                return;
+            } catch (NumberFormatException e){
+                event.getChannel().sendMessage("Please type an integer.").queue();
+                return;
+            }
+        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("exp")){
+
+            if (message.length > 4){
+                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate sqrt [number][exponent]").queue();
+                return;
+            }
+            try {
+                double number = Double.parseDouble(message[2]);
+                double exponent = Double.parseDouble(message[3]);
+
+                double answer = Math.pow(number,exponent);
+
+                if (Double.isInfinite(answer)){
+                    event.getChannel().sendMessage("The numbers you entered were too big,").queue();
+                    return;
+                }
+                event.getChannel().sendMessage("The answer is " + answer).queue();
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("Can you tell me the number you want me to power?").queue();
+                return;
+            } catch (NumberFormatException e){
+                event.getChannel().sendMessage("Please type an integer.").queue();
+                return;
             }
         }
     }
