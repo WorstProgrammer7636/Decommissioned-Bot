@@ -29,8 +29,7 @@ public class StoreData extends ListenerAdapter {
             fr = new FileWriter(file, true);
             br = new BufferedWriter(fr);
             pr = new PrintWriter(br);
-            pr.println(guild);
-            pr.println("true");
+            pr.println(guild + " true");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
