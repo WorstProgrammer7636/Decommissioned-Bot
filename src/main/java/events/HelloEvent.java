@@ -44,10 +44,11 @@ public class HelloEvent extends ListenerAdapter {
                     " will give you further instructions on how to use the commands");
             info.setFooter("Created by hold up and Nard", event.getMember().getUser().getAvatarUrl());
             //update as more functions are added
-            info.addField("LIST OF COMMANDS", "```\n -info \n -calculate \n -piglatin \n -translate \n -meme \n -rickroll```", false);
-            info.addField("ADMINISTRATOR COMMANDS", "```\n -mute \n -tempmute \n -hardmute \n -unmute```", false);
-            info.addField("GOT ANY MORE QUESTIONS OR SUGGESTIONS?", "Join our community and help server! \n https://discord.gg/RVT8ywu \n" +
-                    "\n Invite this bot to your own servers: https://discord.com/api/oauth2/authorize?client_id=765713285965807657&permissions=0&scope=bot", false);
+            info.addField("LIST OF COMMANDS", "```\n -info \n -calculate \n -piglatin \n -translate \n -meme \n -rickroll \n -get \n -bal \n -shop```", false);
+            info.addField("ADMINISTRATOR COMMANDS", "```\n -mute \n -tempmute \n -hardmute \n -unmute \n -toggle```", false);
+            info.addField("GOT ANY MORE QUESTIONS OR SUGGESTIONS?", "Join our community and help server! \n [Support Server](https://discord.gg/RVT8ywu) \n" +
+                    "\n Invite this bot to your own servers: \n " +
+                    "[Invite Bot!](https://discord.com/api/oauth2/authorize?client_id=765713285965807657&permissions=8&scope=bot)", false);
             event.getChannel().sendMessage(info.build()).queue();
             info.clear();
 
