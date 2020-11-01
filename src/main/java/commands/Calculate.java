@@ -169,8 +169,7 @@ public class Calculate extends ListenerAdapter {
         } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("log")){
 
             if (message.length > 4){
-                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate log [base][logNumber]。 " +
-                        "(You can also represent ln with just typing e as the base)").queue();
+                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate log [base][logNumber]。").queue();
                 return;
             }
 
