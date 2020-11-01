@@ -17,7 +17,7 @@ public class Calculate extends ListenerAdapter {
 
         if (message[0].equalsIgnoreCase("-calculate") && message.length == 1){
             event.getChannel().sendMessage("To use this command, type(without brackets): !calculate " +
-                    "[add/sub/mult/divide/exp/sqrt/log] [firstnum] [secondnum]").queue();
+                    "[add/sub/mult/divide/exp/sqrt/log/ln] [firstnum] [secondnum]").queue();
         } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("add")){
 
             if (message.length == 3){
@@ -141,7 +141,6 @@ public class Calculate extends ListenerAdapter {
                 return;
             }
         } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("exp")){
-
             if (message.length > 4){
                 event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate sqrt [number][exponent]").queue();
                 return;
@@ -170,12 +169,15 @@ public class Calculate extends ListenerAdapter {
         } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("log")){
 
             if (message.length > 4){
-                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate log [base][logNumber]").queue();
+                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate log [base][logNumber]。 " +
+                        "(You can also represent ln with just typing e as the base)").queue();
                 return;
             }
 
 
             try {
+
+                //custom base
                 double base = Double.parseDouble(message[2]);
                 double number = Double.parseDouble(message[3]);
 
@@ -211,6 +213,38 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("Please type only numbers.").queue();
                 return;
             }
+        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("ln")){
+
+            if (message.length > 3){
+                event.getChannel().sendMessage("Please type only one number after ln").queue();
+                return;
+            }
+
+            //natural logarithm
+            try{
+                double number = Double.parseDouble(message[2]);
+
+                if (number <= 0){
+                    event.getChannel().sendMessage("Sorry mate you can't do that").queue();
+                    return;
+                }
+
+                double answer = Math.log(number);
+
+                if (Double.isInfinite(number)){
+                    event.getChannel().sendMessage("The numbers you entered were too big,").queue();
+                    return;
+                }
+                event.getChannel().sendMessage("The answer is " + answer).queue();
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("Can you tell me the number you want me to use? Type in the format: -calculate ln [number]").queue();
+                return;
+            } catch (NumberFormatException e){
+                event.getChannel().sendMessage("Please type only numbers.").queue();
+                return;
+            }
+
+
         }
     }
 
