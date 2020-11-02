@@ -1,4 +1,4 @@
-package events;
+package Currency;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.lang.NullPointerException;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 
@@ -22,7 +23,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -39,17 +39,37 @@ public class CurrencySystem extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         long guild = event.getGuild().getIdLong();
-        User org = event.getMember().getUser();
+        User org = null;
         EmbedBuilder eb = new EmbedBuilder();
+        try {
+            org = event.getMember().getUser();
+        } catch (NullPointerException e) {
+
+        }
+
         checkTimer();
 
-        if (event.getAuthor().isBot() || !canGetMoney(org)) {
-            if (!canGetMoney(org) && event.getMessage().getContentRaw().equalsIgnoreCase("-get")) {
-                event.getChannel()
-                        .sendMessage("Dude, I ain't made of money. Wait " + playerTimer.get(org) + " seconds.").queue();
+        if (event.getAuthor().isBot() || !canGetMoney(org) || org == null) {
+            if (!canGetMoney(org) && event.getMessage().getContentRaw().equalsIgnoreCase("-beg")) {
+                eb.setTitle("Stop Begging!");
+                eb.setDescription("Dude, if you keep begging, someone is going to harass you. Wait **"
+                        + playerTimer.get(org) + "** seconds.");
+
+                int R = (int) (Math.random() * 256);
+                int G = (int) (Math.random() * 256);
+                int B = (int) (Math.random() * 256);
+                Color color = new Color(R, G, B);
+                Random random = new Random();
+                final float hue = random.nextFloat();
+                final float saturation = 0.9f;
+                final float luminance = 1.0f;
+                color = Color.getHSBColor(hue, saturation, luminance);
+                eb.setColor(color);
+                event.getChannel().sendMessage(eb.build()).queue();
             }
-        } else if (event.getMessage().getContentRaw().equalsIgnoreCase("-get")) {
+        } else if (event.getMessage().getContentRaw().equalsIgnoreCase("-beg")) {
             try {
+
                 long member = event.getMember().getIdLong();
                 checkadd(member, org, event.getChannel());
                 setPlayerTime(org, 30);
@@ -58,8 +78,8 @@ public class CurrencySystem extends ListenerAdapter {
                 e.printStackTrace();
             }
         }
-        // SEPARATE COMMANDS
-        if (event.getMessage().getContentRaw().startsWith("-bal")) {
+        // SEPERATE COMMANDS
+        if (event.getMessage().getContentRaw().equalsIgnoreCase("-bal")) {
             try {
                 long member = event.getMember().getIdLong();
 
@@ -78,7 +98,7 @@ public class CurrencySystem extends ListenerAdapter {
             final float saturation = 0.9f;
             final float luminance = 1.0f;
             color = Color.getHSBColor(hue, saturation, luminance);
-            eb.addField("Consumables:", "Coffee (500 coins) \n *More Items Coming Soon*", false);
+            eb.addField("Consumables:", "Coffee (500 coins) :coffee: \n *More Items Coming Soon*", false);
             eb.setFooter("You have ten seconds to pick an item! Simply type in an object's name to get it!");
             eb.setColor(color);
             event.getChannel().sendMessage(eb.build()).queue();
@@ -108,9 +128,13 @@ public class CurrencySystem extends ListenerAdapter {
         boolean found = false;
         for (int i = 0; i < MemberIDS.size(); i++) {
             if (MemberIDS.get(i) == member) {
-                int a = random.nextInt(500);
-                MemberMoney.set(i, MemberMoney.get(i) + a);
-                channel.sendMessage("You got " + a + " coins from a kind fellow.").queue();
+                int a = random.nextInt(750);
+                if (a <= 400) {
+                    MemberMoney.set(i, MemberMoney.get(i) + a);
+                    channel.sendMessage("You got " + a + " coins from a kind fellow.").queue();
+                } else {
+                    channel.sendMessage("You didn't get any coins from begging. Get a job!").queue();
+                }
 
                 found = true;
                 break;
@@ -224,8 +248,7 @@ public class CurrencySystem extends ListenerAdapter {
         waiter.waitForEvent(GuildMessageReceivedEvent.class, (event) -> {
             long nchannel = event.getChannel().getIdLong();
             long nuser = event.getMember().getUser().getIdLong();
-            return (channel == nchannel && member == nuser
-            );
+            return (channel == nchannel && member == nuser);
         }, (event) -> {
             String item = event.getMessage().getContentRaw();
             ArrayList<Long> MemberIDS = new ArrayList<Long>();
