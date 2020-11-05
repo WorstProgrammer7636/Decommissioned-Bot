@@ -14,17 +14,18 @@ public class CensorWords extends ListenerAdapter {
 
         String[] combine = message.split(" ");
         String newstring = "";
+        long nuser = event.getMember().getUser().getIdLong();
         for(int i = 0; i < combine.length; i++){
             newstring += combine[i];
         }
 
         //Work on duplicate char case later
         if (newstring.contains("nigger") || newstring.contains("nigga")) {
-            event.getChannel().sendMessage("Do not say that @" + event.getMember().getEffectiveName()).queue();
+            event.getChannel().sendMessage("Do not say that <@" + nuser + ">").queue();
             event.getMessage().delete().queue();
         }
         else if (newstring.contains("chingchong") ) {
-            event.getChannel().sendMessage("Do not say that @" + event.getMember().getEffectiveName()).queue();
+            event.getChannel().sendMessage("Do not say that <@" + nuser + ">").queue();
             event.getMessage().delete().queue();
         }
 
