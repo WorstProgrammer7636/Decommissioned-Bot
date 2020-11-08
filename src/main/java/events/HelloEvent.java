@@ -46,9 +46,10 @@ public class HelloEvent extends ListenerAdapter {
             //update as more functions are added
             info.addField("LIST OF COMMANDS", "```\n -info \n -calculate \n -piglatin \n -translate \n -meme \n -rickroll \n -get \n -bal \n -shop```", false);
             info.addField("ADMINISTRATOR COMMANDS", "```\n -mute \n -tempmute \n -hardmute \n -unmute \n -toggle```", false);
+            info.addField("CURRENCY COMMANDS", "```\n -beg \n -rob \n -bal \n -shop \n -inv \n -kill \n -slots```", false);
             info.addField("GOT ANY MORE QUESTIONS OR SUGGESTIONS?", "Join our community and help server! \n [Support Server](https://discord.gg/RVT8ywu) \n" +
                     "\n Invite this bot to your own servers: \n " +
-                    "[Invite Bot!](https://discord.com/api/oauth2/authorize?client_id=765713285965807657&permissions=8&scope=bot)", false);
+                    "[Invite Bot!](https://discord.com/api/oauth2/authorize?client_id=765713285965807657&permissions=8&scope=bot) \n [Our Website](https://worstprogrammer7636.github.io/)", false);
             event.getChannel().sendMessage(info.build()).queue();
             info.clear();
 
