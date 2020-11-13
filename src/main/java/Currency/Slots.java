@@ -90,7 +90,7 @@ public class Slots extends ListenerAdapter {
 
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> MemberMoney = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("MemberMoney"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {
@@ -131,10 +131,10 @@ public class Slots extends ListenerAdapter {
                         }
                         if (win == 0) {
                             MemberMoney.set(i, MemberMoney.get(i) - truebet);
-                            BufferedReader JackpotReader = new BufferedReader(new FileReader("CurrentSlotsJackpot"));
+                            BufferedReader JackpotReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/CurrentSlotsJackpot"));
                             jackpot = Integer.parseInt(JackpotReader.readLine());
                             PrintWriter JackpotWriter = new PrintWriter(
-                                    new BufferedWriter(new FileWriter("CurrentSlotsJackpot")));
+                                    new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/CurrentSlotsJackpot")));
                             int newjackpot = jackpot + (truebet / 3);
                             JackpotWriter.write(String.valueOf(newjackpot));
                             JackpotReader.close();
@@ -146,12 +146,12 @@ public class Slots extends ListenerAdapter {
                             MemberMoney.set(i, MemberMoney.get(i) + truebet * 3);
                             if (circles[first].equals(":star2:")) {
                                 BufferedReader JackpotReader = new BufferedReader(
-                                        new FileReader("CurrentSlotsJackpot"));
+                                        new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/CurrentSlotsJackpot"));
                                 jackpot = Integer.parseInt(JackpotReader.readLine());
                                 MemberMoney.set(i, MemberMoney.get(i) + jackpot);
 
                                 PrintWriter JackpotWriter = new PrintWriter(
-                                        new BufferedWriter(new FileWriter("CurrentSlotsJackpot")));
+                                        new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/CurrentSlotsJackpot")));
                                 int newjackpot = 0;
                                 gotjackpot = true;
                                 JackpotWriter.write(String.valueOf(newjackpot));
@@ -220,7 +220,7 @@ public class Slots extends ListenerAdapter {
         } else {
             channel.sendMessage("Error: User not found!").queue();
         }
-        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("MemberMoney")));
+        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney")));
 
         for (int i = 0; i < MemberIDS.size(); i++) {
 
@@ -237,7 +237,7 @@ public class Slots extends ListenerAdapter {
     }
 
     public void jackpot(TextChannel channel) throws IOException {
-        BufferedReader JackpotReader = new BufferedReader(new FileReader("CurrentSlotsJackpot"));
+        BufferedReader JackpotReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/CurrentSlotsJackpot"));
 
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Jackpot!");

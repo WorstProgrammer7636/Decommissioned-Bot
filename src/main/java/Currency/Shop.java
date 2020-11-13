@@ -102,7 +102,7 @@ public class Shop extends ListenerAdapter {
             ArrayList<Integer> MemberMoney = new ArrayList<Integer>();
             BufferedReader myReader = null;
             try {
-                myReader = new BufferedReader(new FileReader("MemberMoney"));
+                myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney"));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -148,7 +148,7 @@ public class Shop extends ListenerAdapter {
                             ArrayList<Long> MemberIDSshotgun = new ArrayList<Long>();
                             ArrayList<Integer> MemberBullets = new ArrayList<Integer>();
                             try {
-                                BufferedReader shotgunreader = new BufferedReader(new FileReader("ShotgunRounds"));
+                                BufferedReader shotgunreader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/ShotgunRounds"));
                                 try {
                                     while ((line = shotgunreader.readLine()) != null) {
                                         st = new StringTokenizer(line);
@@ -192,7 +192,7 @@ public class Shop extends ListenerAdapter {
                             }
                             try {
                                 PrintWriter shotgunwriter = new PrintWriter(
-                                        new BufferedWriter(new FileWriter("ShotgunRounds")));
+                                        new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/ShotgunRounds")));
                                 for (int m = 0; m < MemberIDSshotgun.size(); m++) {
                                     String value = String.valueOf(MemberIDSshotgun.get(m));
                                     String bullets = String.valueOf(MemberBullets.get(m));
@@ -228,7 +228,7 @@ public class Shop extends ListenerAdapter {
             }
             PrintWriter myWriter = null;
             try {
-                myWriter = new PrintWriter(new BufferedWriter(new FileWriter("MemberMoney")));
+                myWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney")));
             } catch (IOException e) {
                 e.printStackTrace();
             }

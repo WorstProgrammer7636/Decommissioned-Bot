@@ -87,7 +87,7 @@ public class RickRoll extends ListenerAdapter {
         ArrayList<Long> GuildIDS = new ArrayList<Long>();
         ArrayList<Boolean> Enable = new ArrayList<Boolean>();
 
-        BufferedReader myReader = new BufferedReader(new FileReader("enable.in"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/enable.in"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {
@@ -109,7 +109,7 @@ public class RickRoll extends ListenerAdapter {
             Enable.add(true);
         }
 
-        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("enable.in")));
+        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/enable.in")));
 
         for (int i = 0; i < Enable.size(); i++) {
 
@@ -127,7 +127,7 @@ public class RickRoll extends ListenerAdapter {
 
     private boolean check(long ID) throws NumberFormatException, IOException {
 
-        BufferedReader myReader = new BufferedReader(new FileReader("enable.in"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/enable.in"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {

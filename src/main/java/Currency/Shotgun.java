@@ -93,7 +93,7 @@ public class Shotgun extends ListenerAdapter {
         ArrayList<Integer> MemberBullets = new ArrayList<Integer>();
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> MemberMoney = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("MemberMoney"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {
@@ -107,7 +107,7 @@ public class Shotgun extends ListenerAdapter {
 
         myReader.close();
         try {
-            BufferedReader shotgunreader = new BufferedReader(new FileReader("ShotgunRounds"));
+            BufferedReader shotgunreader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/ShotgunRounds"));
             try {
                 while ((line = shotgunreader.readLine()) != null) {
                     st = new StringTokenizer(line);
@@ -186,7 +186,7 @@ public class Shotgun extends ListenerAdapter {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("MemberMoney")));
+        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney")));
 
         for (int i = 0; i < MemberIDS.size(); i++) {
 
@@ -200,7 +200,7 @@ public class Shotgun extends ListenerAdapter {
 
         }
         myWriter.close();
-        PrintWriter shotGunWriter = new PrintWriter(new BufferedWriter(new FileWriter("ShotgunRounds")));
+        PrintWriter shotGunWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/ShotgunRounds")));
 
         for (int i = 0; i < MemberIDSshotgun.size(); i++) {
 

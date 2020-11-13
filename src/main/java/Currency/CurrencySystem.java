@@ -120,7 +120,7 @@ public class CurrencySystem extends ListenerAdapter {
     private void checkadd(long member, User org, TextChannel channel) throws IOException {
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> MemberMoney = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("MemberMoney"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {
@@ -159,7 +159,7 @@ public class CurrencySystem extends ListenerAdapter {
 
         }
 
-        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("MemberMoney")));
+        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney")));
 
         for (int i = 0; i < MemberIDS.size(); i++) {
 
@@ -178,7 +178,7 @@ public class CurrencySystem extends ListenerAdapter {
     private void getMoney(long guild, long member, TextChannel channel, Member org) throws IOException {
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> MemberMoney = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("MemberMoney"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {

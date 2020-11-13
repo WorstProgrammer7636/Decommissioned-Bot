@@ -12,7 +12,7 @@ public class StoreData extends ListenerAdapter {
 
     public void onGuildJoin(GuildJoinEvent e) {
         long guild = e.getGuild().getIdLong();
-        appendUsingPrintWriter("enable.in", guild);
+        appendUsingPrintWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/enable.in", guild);
     }
 
     public void onGuildLeave(GuildLeaveEvent e){

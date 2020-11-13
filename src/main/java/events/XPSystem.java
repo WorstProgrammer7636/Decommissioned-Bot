@@ -51,7 +51,7 @@ public class XPSystem extends ListenerAdapter {
         ArrayList<Long> GuildIDS = new ArrayList<Long>();
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> MemberXP = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("MemberXP"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberXP"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {
@@ -94,7 +94,7 @@ public class XPSystem extends ListenerAdapter {
 
         }
 
-        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("MemberXP")));
+        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberXP")));
 
         for (int i = 0; i < GuildIDS.size(); i++) {
 
@@ -117,7 +117,7 @@ public class XPSystem extends ListenerAdapter {
         ArrayList<Long> GuildIDS = new ArrayList<Long>();
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> MemberXP = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("MemberXP"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberXP"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {

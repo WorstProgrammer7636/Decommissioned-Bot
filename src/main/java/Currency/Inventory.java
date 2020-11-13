@@ -64,7 +64,7 @@ public class Inventory extends ListenerAdapter {
     public void getInventory(Guild guild, long memberID, TextChannel channel, Member member) throws IOException {
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> bullets = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("ShotgunRounds"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/ShotgunRounds"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {

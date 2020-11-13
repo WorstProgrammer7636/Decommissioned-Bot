@@ -99,7 +99,7 @@ public class Rob extends ListenerAdapter {
     private void checkadd(long member, User org, TextChannel channel, long robbed, User orgrob) throws IOException {
         ArrayList<Long> MemberIDS = new ArrayList<Long>();
         ArrayList<Integer> MemberMoney = new ArrayList<Integer>();
-        BufferedReader myReader = new BufferedReader(new FileReader("MemberMoney"));
+        BufferedReader myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney"));
         StringTokenizer st = null;
         String line;
         while ((line = myReader.readLine()) != null) {
@@ -170,7 +170,7 @@ public class Rob extends ListenerAdapter {
 
         }
 
-        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("MemberMoney")));
+        PrintWriter myWriter = new PrintWriter(new BufferedWriter(new FileWriter("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney")));
 
         for (int i = 0; i < MemberIDS.size(); i++) {
 
