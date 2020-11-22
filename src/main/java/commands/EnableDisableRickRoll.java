@@ -15,9 +15,32 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EnableDisableRickRoll extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
         long ID = event.getGuild().getIdLong();
-        if (event.getMessage().getContentRaw().startsWith("-toggle")) {
+        if (event.getMessage().getContentRaw().startsWith(prefix + "toggle")) {
             if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)){
                 event.getChannel().sendMessage("Sorry! You do not have permission to perform this command.").queue();
                 return;
