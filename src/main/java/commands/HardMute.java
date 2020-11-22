@@ -1,6 +1,10 @@
 package commands;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,11 +20,34 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class HardMute extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
     public void onMessageReceived(MessageReceivedEvent event) {
         Message message = event.getMessage();
         String content = message.getContentRaw();
         MessageChannel channel = event.getChannel();
-        if (content.startsWith("-hardmute"))
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+        if (content.startsWith(prefix + "hardmute"))
             if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
 
                 String[] spliced = content.split("\\s+");
@@ -80,7 +107,7 @@ public class HardMute extends ListenerAdapter {
                                 }
                             } catch (NumberFormatException e) {
                                 channel.sendMessage(
-                                        "Can you use the command correctly PLEASE? Just do -hardmute @<user> [time in minutes][reason]! SIMPLE!")
+                                        "Can you use the command correctly PLEASE? Just do " + prefix + "hardmute @<user> [time in minutes][reason]! SIMPLE!")
                                         .queue();
                             } catch (HierarchyException e) {
                                 channel.sendMessage(
@@ -147,23 +174,23 @@ public class HardMute extends ListenerAdapter {
                                 }
                             } catch (NumberFormatException e) {
                                 channel.sendMessage(
-                                        "Can you use the command correctly PLEASE? Just do -hardmute @<user> [time in minutes][reason]! SIMPLE!")
+                                        "Can you use the command correctly PLEASE? Just do " + prefix + "hardmute @<user> [time in minutes][reason]! SIMPLE!")
                                         .queue();
                             }
                         } else {
                             channel.sendMessage(
-                                    "Can you use the command correctly PLEASE? Just do -hardmute @<user> [time in minutes][reason]! SIMPLE!")
+                                    "Can you use the command correctly PLEASE? Just do " + prefix + "hardmute @<user> [time in minutes][reason]! SIMPLE!")
                                     .queue();
                         }
 
                     } else {
                         channel.sendMessage(
-                                "Can you use the command correctly PLEASE? Just do -hardmute @<user> [time in minutes][reason]! SIMPLE!")
+                                "Can you use the command correctly PLEASE? Just do " + prefix + "hardmute @<user> [time in minutes][reason]! SIMPLE!")
                                 .queue();
                     }
                 } else {
                     channel.sendMessage(
-                            "Can you use the command correctly PLEASE? Just do -hardmute @<user> [time in minutes][reason]! SIMPLE!")
+                            "Can you use the command correctly PLEASE? Just do " + prefix + "hardmute @<user> [time in minutes][reason]! SIMPLE!")
                             .queue();
                 }
             } else {
