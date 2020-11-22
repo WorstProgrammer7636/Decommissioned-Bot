@@ -17,19 +17,42 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class RickRoll extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
         Message message = event.getMessage();
         String content = message.getContentRaw();
         String[] spliced = content.split("\\s+");
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException e) {
+            e.printStackTrace();
+        }
         try {
             EnableDisable(event.getGuild().getIdLong());
         } catch (IOException e1) {
             e1.printStackTrace();
         }
 
-        if (spliced[0].equalsIgnoreCase("-rickroll") && spliced.length == 1) {
+        if (spliced[0].equalsIgnoreCase(prefix + "rickroll") && spliced.length == 1) {
             try {
                 if (check(event.getGuild().getIdLong())) {
                     event.getChannel().sendMessage("Who do you want to send the video to?").queue();
@@ -43,7 +66,7 @@ public class RickRoll extends ListenerAdapter {
             } catch (NumberFormatException | IOException e) {
                 e.printStackTrace();
             }
-        } else if (spliced[0].equalsIgnoreCase("-rickroll") && spliced.length == 2
+        } else if (spliced[0].equalsIgnoreCase(prefix + "rickroll") && spliced.length == 2
                 && (spliced[1].equalsIgnoreCase("@everyone") || spliced[1].equalsIgnoreCase("@here"))) {
             try {
                 if (check(event.getGuild().getIdLong())) {
@@ -58,7 +81,7 @@ public class RickRoll extends ListenerAdapter {
             } catch (NumberFormatException | IOException e) {
                 e.printStackTrace();
             }
-        } else if (spliced[0].equalsIgnoreCase("-rickroll") && spliced.length == 2 && spliced[1].startsWith("<@")) {
+        } else if (spliced[0].equalsIgnoreCase(prefix + "rickroll") && spliced.length == 2 && spliced[1].startsWith("<@")) {
             List<Member> mentionedMembers = message.getMentionedMembers();
             try {
                 if (check(event.getGuild().getIdLong())) {
