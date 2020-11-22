@@ -3,22 +3,47 @@ package commands;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.StringTokenizer;
 
 public class Calculate extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
 
 
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event){
-
+        String prefix = "";
         String[] message = event.getMessage().getContentRaw().split(" ");
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException e) {
+            e.printStackTrace();
+        }
 
 
-        if (message[0].equalsIgnoreCase("-calculate") && message.length == 1){
-            event.getChannel().sendMessage("To use this command, type(without brackets): !calculate " +
-                    "[add/sub/mult/divide/exp/sqrt/log/ln] [firstnum] [secondnum]").queue();
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("add")){
+        if (message[0].equalsIgnoreCase(prefix + "calculate") && message.length == 1){
+            event.getChannel().sendMessage("To use this command, type(without brackets): " + prefix + "calculate " +
+                    "[add/sub/mult/divide/exp/sqrt/log/ln] [appropriate number(s)]").queue();
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("add")){
 
             if (message.length == 3){
                 event.getChannel().sendMessage("You need to enter at least two numbers").queue();
@@ -48,7 +73,7 @@ public class Calculate extends ListenerAdapter {
 
 
 
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("sub")){
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("sub")){
             if (message.length == 3){
                 event.getChannel().sendMessage("You need to enter at least two numbers").queue();
                 return;
@@ -76,7 +101,7 @@ public class Calculate extends ListenerAdapter {
             }
 
 
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("mult")){
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("mult")){
             if (message.length == 3){
                 event.getChannel().sendMessage("You need to enter at least two numbers").queue();
                 return;
@@ -102,7 +127,7 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("Just stop").queue();
                 return;
             }
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("divide")){
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("divide")){
             double numberOne = 0;
             double numberTwo = 0;
             try {
@@ -121,10 +146,10 @@ public class Calculate extends ListenerAdapter {
             } catch (NumberFormatException e){
                 event.getChannel().sendMessage("Just stop").queue();
             }
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("root")){
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("root")){
 
             if (message.length > 4){
-                event.getChannel().sendMessage("You can only input two numbes! Type in the format: -calculate root [number][rootNum]").queue();
+                event.getChannel().sendMessage("You can only input two numbes! Type in the format: " + prefix + "calculate root [number][rootNum]").queue();
                 return;
             }
             try {
@@ -140,9 +165,9 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("Please type only integers.").queue();
                 return;
             }
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("exp")){
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("exp")){
             if (message.length > 4){
-                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate sqrt [number][exponent]").queue();
+                event.getChannel().sendMessage("You can only input two numbers! Type in the format: " + prefix + "calculate sqrt [number][exponent]").queue();
                 return;
             }
 
@@ -166,10 +191,10 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("Please type a number.").queue();
                 return;
             }
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("log")){
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("log")){
 
             if (message.length > 4){
-                event.getChannel().sendMessage("You can only input two numbers! Type in the format: -calculate log [base][logNumber]。").queue();
+                event.getChannel().sendMessage("You can only input two numbers! Type in the format: " + prefix + "calculate log [base][logNumber]。").queue();
                 return;
             }
 
@@ -206,13 +231,13 @@ public class Calculate extends ListenerAdapter {
 
                 event.getChannel().sendMessage("The answer is " + answer).queue();
             } catch (ArrayIndexOutOfBoundsException e){
-                event.getChannel().sendMessage("Can you tell me the number you want me to log? Type in the format: -calculate log [base][logNumber]").queue();
+                event.getChannel().sendMessage("Can you tell me the number you want me to log? Type in the format: " + prefix + "calculate log [base][logNumber]").queue();
                 return;
             } catch (NumberFormatException e){
                 event.getChannel().sendMessage("Please type only numbers.").queue();
                 return;
             }
-        } else if (message[0].equalsIgnoreCase("-calculate") && message[1].equalsIgnoreCase("ln")){
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("ln")){
 
             if (message.length > 3){
                 event.getChannel().sendMessage("Please type only one number after ln").queue();
@@ -236,7 +261,34 @@ public class Calculate extends ListenerAdapter {
                 }
                 event.getChannel().sendMessage("The answer is " + answer).queue();
             } catch (ArrayIndexOutOfBoundsException e){
-                event.getChannel().sendMessage("Can you tell me the number you want me to use? Type in the format: -calculate ln [number]").queue();
+                event.getChannel().sendMessage("Can you tell me the number you want me to use? Type in the format: " + prefix + "calculate ln [number]").queue();
+                return;
+            } catch (NumberFormatException e){
+                event.getChannel().sendMessage("Please type only numbers.").queue();
+                return;
+            }
+
+
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("sin")){
+
+            if (message.length > 3){
+                event.getChannel().sendMessage("Please type only one number after ln").queue();
+                return;
+            }
+
+            try{
+                double number = Double.parseDouble(message[2]);
+                double radians = Math.toRadians(number);
+                double answer = Math.sin(radians);
+                double realAnswer = format(answer);
+
+                if (Double.isInfinite(number)){
+                    event.getChannel().sendMessage("The numbers you entered were too big,").queue();
+                    return;
+                }
+                event.getChannel().sendMessage("The answer is " + realAnswer).queue();
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("Can you tell me the number you want me to use? Type in the format: " + prefix + "calculate sin [number]").queue();
                 return;
             } catch (NumberFormatException e){
                 event.getChannel().sendMessage("Please type only numbers.").queue();
@@ -245,6 +297,10 @@ public class Calculate extends ListenerAdapter {
 
 
         }
+    }
+
+    private double format(double value) {
+        return (double)Math.round(value * 1000000) / 1000000; //you can change this to round up the value(for two position use 100...)
     }
 
 }
