@@ -1,7 +1,11 @@
 package commands;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -13,10 +17,33 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Meme extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         TextChannel channel = event.getChannel();
         String message = event.getMessage().getContentRaw();
-        if (message.equalsIgnoreCase("-meme")) {
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+        if (message.equalsIgnoreCase(prefix + "meme")) {
             WebUtils.ins.getJSONObject("https://apis.duncte123.me/meme").async((json) -> {
                 if (!json.get("success").asBoolean()) {
                     channel.sendMessage("Something went wrong, try again later!").queue();
