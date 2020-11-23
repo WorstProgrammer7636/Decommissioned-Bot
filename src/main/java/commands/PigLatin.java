@@ -8,13 +8,38 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Arrays;
-import java.util.ArrayList;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
 public class PigLatin extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
 
     public void onMessageReceived(MessageReceivedEvent event){
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
         String orgmessage = event.getMessage().getContentRaw();
         String after = orgmessage.trim().replaceAll(" +", " ");
 
@@ -22,7 +47,7 @@ public class PigLatin extends ListenerAdapter {
         if (event.getAuthor().isBot()){
             return;
         }
-        if (message[0].equalsIgnoreCase("-piglatin")){
+        if (message[0].equalsIgnoreCase(prefix + "piglatin")){
             String newMessage = "";
             String sentence = "";
             try {
@@ -39,7 +64,7 @@ public class PigLatin extends ListenerAdapter {
             } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException e)
             {
                 event.getChannel().sendMessage("This is the piglatin command! " +
-                        "Enter any word after the command in this format: -piglatin [word or sentence]and the bot will" +
+                        "Enter any word after the command in this format: " + prefix + "piglatin [word or sentence]and the bot will" +
                         " return the phrase you requested in pig latin!").queue();;
 
             }
