@@ -6,15 +6,42 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class Unmute extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
 
     public void onMessageReceived(MessageReceivedEvent event) {
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
         Message message = event.getMessage();
         String content = message.getContentRaw();
         MessageChannel channel = event.getChannel();
-        if (content.startsWith("-unmute"))
+        if (content.startsWith(prefix + "unmute"))
             if (event.getMember().hasPermission(Permission.MANAGE_ROLES)) {
                 {
                     String[] spliced = content.split("\\s+");
@@ -51,13 +78,13 @@ public class Unmute extends ListenerAdapter {
 
                         } else {
                             channel.sendMessage(
-                                    "Can you use the command correctly PLEASE? Just do -unmute @<user>! SIMPLE!")
+                                    "Can you use the command correctly PLEASE? Just do " + prefix + "unmute @<user>! SIMPLE!")
                                     .queue();
 
                         }
                     } else {
                         channel.sendMessage(
-                                "Can you use the command correctly PLEASE? Just do -unmute @<user>! SIMPLE!").queue();
+                                "Can you use the command correctly PLEASE? Just do " + prefix + "unmute @<user>! SIMPLE!").queue();
                     }
 
                 }
