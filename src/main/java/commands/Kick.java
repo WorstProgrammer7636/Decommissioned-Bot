@@ -1,6 +1,10 @@
 package commands;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -21,20 +25,49 @@ public class Kick extends ListenerAdapter {
 	public Kick(EventWaiter waiter) {
 		this.waiter = waiter;
 	}
+	public String prefix(long id) throws NumberFormatException, IOException {
+
+		BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+		StringTokenizer st = null;
+		String line;
+		while ((line = br.readLine()) != null) {
+			st = new StringTokenizer(line);
+			if (id == Long.parseLong(st.nextToken())) {
+				br.close();
+				String prefix = st.nextToken();
+
+				return prefix;
+			}
+		}
+		br.close();
+		return "ERROR";
+	}
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 		Message message = e.getMessage();
 		String content = message.getContentRaw();
 		MessageChannel channel = e.getChannel();
 		String reason = "";
-		if (content.startsWith("-kick")) {
+		String prefix = "";
+		try {
+			prefix = prefix(e.getGuild().getIdLong());
+		} catch (NumberFormatException | IOException f) {
+			f.printStackTrace();
+		}
+		if (content.startsWith(prefix + "kick")) {
 			if (e.getMember().hasPermission(Permission.KICK_MEMBERS)) {
 				String[] spliced = content.split("\\s+");
-				TextChannel textChannel = e.getGuild().getTextChannelsByName("log", true).get(0);
+				TextChannel textChannel = null;
+				try {
+					textChannel = e.getGuild().getTextChannelsByName("log", true).get(0);
+				} catch (Exception f){
+					textChannel = e.getChannel();
+				}
+
 				int length = spliced.length;
 				if (length == 1) {
 					channel.sendMessage(
-							"To use this command, type '-kick @<user> [reason]. A reason must be provided for this command to work.")
+							"To use this command, type " + prefix + "kick @<user> [reason]. A reason must be provided for this command to work.")
 							.queue();
 				} else if (length == 2) {
 					channel.sendMessage(
@@ -64,7 +97,7 @@ public class Kick extends ListenerAdapter {
 						}
 					}else {
 						channel.sendMessage(
-								"To use this command, type '-kick @<user> [reason]. A reason must be provided for this command to work.")
+								"To use this command, type " + prefix + "kick @<user> [reason]. A reason must be provided for this command to work.")
 								.queue();
 					}
 				}
