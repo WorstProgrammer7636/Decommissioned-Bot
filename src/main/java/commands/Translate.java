@@ -7,10 +7,36 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.json.JSONException;
 
 import javax.management.ListenerNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class Translate extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
     public void onGuildMessageReceived(GuildMessageReceivedEvent command){
+        String prefix = "";
+        try {
+            prefix = prefix(command.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
         String orgmessage = command.getMessage().getContentRaw();
         String after = orgmessage.trim().replaceAll(" +", " ");
         EmbedBuilder info = new EmbedBuilder();
@@ -27,11 +53,11 @@ public class Translate extends ListenerAdapter {
                 "ug", "uk", "ur", "uz", "ve", "vi", "vo", "wa", "wo", "xh", "yi", "yo", "za", "zu"};
 
         String[] message = after.split(" ");
-        if (message[0].equalsIgnoreCase("-translate") && message.length == 1){
+        if (message[0].equalsIgnoreCase(prefix + "translate") && message.length == 1){
             EmbedBuilder description = new EmbedBuilder();
             description.setTitle("TRANSLATE COMMAND");
             description.addField("Info", "This is the translate command! Please type " +
-                    "-translate [language abv] [word/sentence]\n For example: [-translate es please do the" +
+                    prefix + "translate [language abv] [word/sentence]\n For example: [" + prefix + "translate es please do the" +
                     " dishes] will translate 'please do the dishes' into spanish\n ", false);
 
             description.setDescription("LIST OF POPULAR LANGUAGE ABVs\n en - ENGLISH\n es - SPANISH\n fr - FRENCH\n zh - CHINESE\n ko - KOREAN\n " +
@@ -41,7 +67,7 @@ public class Translate extends ListenerAdapter {
 
             command.getChannel().sendMessage(description.build()).queue();
             description.clear();
-        } else if (message[0].equalsIgnoreCase("-translate") && message.length >= 2){
+        } else if (message[0].equalsIgnoreCase(prefix + "translate") && message.length >= 2){
             String sentence = "";
 
             for (int i = 2; i < message.length; i++){
@@ -60,7 +86,7 @@ public class Translate extends ListenerAdapter {
                 if (languageFound){
                     command.getChannel().sendMessage(GoogleTranslate.translate(message[1], sentence)).queue();
                 } else {
-                    command.getChannel().sendMessage("Language not found. You can view the currently available languages by typing -translate").queue();
+                    command.getChannel().sendMessage("Language not found. You can view the currently available languages by typing " + prefix + "translate").queue();
                 }
 
             } catch (IOException e) {
