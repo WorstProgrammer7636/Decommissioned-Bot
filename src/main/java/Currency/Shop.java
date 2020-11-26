@@ -33,6 +33,24 @@ public class Shop extends ListenerAdapter {
         this.waiter = waiter;
     }
 
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
+
     private HashMap<User, Integer> shopTimer = new HashMap<>();
     private int n = 0;
 
@@ -45,9 +63,16 @@ public class Shop extends ListenerAdapter {
 
         }
 
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+
         checkshopTimer();
-        if (event.getMessage().getContentRaw().equalsIgnoreCase("-shop") && !org.isBot()) {
-            if (!canGetShop(org) && event.getMessage().getContentRaw().equalsIgnoreCase("-shop")) {
+        if (event.getMessage().getContentRaw().equalsIgnoreCase(prefix + "shop") && !org.isBot()) {
+            if (!canGetShop(org) && event.getMessage().getContentRaw().equalsIgnoreCase(prefix + "shop")) {
                 eb.setTitle("Processing...");
                 eb.setDescription("The shopkeeper is still processing your last transaction. Wait **"
                         + shopTimer.get(org) + "** seconds.");
@@ -105,6 +130,12 @@ public class Shop extends ListenerAdapter {
                 myReader = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/MemberMoney"));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+            }
+            String prefix = "";
+            try {
+                prefix = prefix(event.getGuild().getIdLong());
+            } catch (NumberFormatException | IOException f) {
+                f.printStackTrace();
             }
             StringTokenizer st = null;
             String line;
@@ -178,7 +209,7 @@ public class Shop extends ListenerAdapter {
                                         }
                                     } else {
                                         sendchannel.sendMessage(
-                                                "You spent 1000 coins on a shotgun round! Run -kill [@user] to make someone lose their life savings! "
+                                                "You spent 1000 coins on a shotgun round! Run " + prefix + "kill [@user] to make someone lose their life savings! "
                                                         + "If the survive, however, you will lose yours!")
                                                 .queue();
                                         MemberIDSshotgun.add(member);
