@@ -21,13 +21,36 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class XPSystem extends ListenerAdapter {
     private HashMap<Member, Integer> playerTimer = new HashMap<>();
     private int i = 0;
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         long member = event.getMember().getIdLong();
         long guild = event.getGuild().getIdLong();
         Member org = event.getMember();
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
 
-        if (event.getMessage().getContentRaw().startsWith("-") || event.getAuthor().isBot() || !canGetXp(org)) {
+        if (event.getMessage().getContentRaw().startsWith(prefix) || event.getAuthor().isBot() || !canGetXp(org)) {
         } else {
             try {
                 checkadd(member, guild, org);
@@ -38,7 +61,7 @@ public class XPSystem extends ListenerAdapter {
                 e.printStackTrace();
             }
         }
-        if (event.getMessage().getContentRaw().startsWith("-xp")) {
+        if (event.getMessage().getContentRaw().startsWith(prefix + "xp")) {
             try {
                 getXP(guild, member, event.getChannel());
             } catch (IOException e) {
