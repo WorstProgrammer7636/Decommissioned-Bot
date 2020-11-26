@@ -25,11 +25,35 @@ public class Shotgun extends ListenerAdapter {
     private HashMap<User, Integer> playerTimer = new HashMap<User, Integer>();
     private int o = 0;
 
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
+
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         String[] split = event.getMessage().getContentRaw().split("\\s+");
         TextChannel channel = event.getChannel();
         checkTimer();
-        if (split[0].equalsIgnoreCase("-kill") && !event.getAuthor().isBot() && canKill(event.getAuthor())) {
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+        if (split[0].equalsIgnoreCase(prefix + "kill") && !event.getAuthor().isBot() && canKill(event.getAuthor())) {
             if (split.length == 2) {
                 if (split[1].startsWith("<@")) {
                     User shooter = event.getAuthor();
@@ -67,7 +91,7 @@ public class Shotgun extends ListenerAdapter {
             } else {
                 channel.sendMessage("Run the command again, but this time mention someone to kill!").queue();
             }
-        } else if (split[0].equalsIgnoreCase("-kill")) {
+        } else if (split[0].equalsIgnoreCase(prefix + "kill")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setTitle("The police are looking for you!");
             eb.setDescription("You just murdered someone, so wait for the police to stop looking for you! Wait **"
