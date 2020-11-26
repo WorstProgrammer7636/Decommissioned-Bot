@@ -24,12 +24,35 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class Slots extends ListenerAdapter {
     private HashMap<User, Integer> playerTimer = new HashMap<User, Integer>();
     private int o = 0;
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         checkTimer();
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
         String[] split = event.getMessage().getContentRaw().split("\\s+");
-        if (split[0].equalsIgnoreCase("-slots") && canBet(event.getAuthor())) {
-            if (split[0].equalsIgnoreCase("-slots") && split.length >= 2) {
+        if (split[0].equalsIgnoreCase(prefix + "slots") && canBet(event.getAuthor())) {
+            if (split[0].equalsIgnoreCase(prefix + "slots") && split.length >= 2) {
                 int bet = 0;
                 try {
                     bet = Integer.parseInt(split[1]);
@@ -56,17 +79,17 @@ public class Slots extends ListenerAdapter {
                         e.printStackTrace();
                     }
                 }
-            } else if (split[0].equalsIgnoreCase("-slots")) {
-                event.getChannel().sendMessage("Do -slots [bet] to use the slot machine!").queue();
+            } else if (split[0].equalsIgnoreCase(prefix + "slots")) {
+                event.getChannel().sendMessage("Do " + prefix + "slots [bet] to use the slot machine!").queue();
 
             }
-        } else if (split[0].equalsIgnoreCase("-jackpot")) {
+        } else if (split[0].equalsIgnoreCase(prefix + "jackpot")) {
             try {
                 jackpot(event.getChannel());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (split[0].equalsIgnoreCase("-slots")) {
+        } else if (split[0].equalsIgnoreCase(prefix + "slots")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setTitle("Slow it down!");
             eb.setDescription("You don't want to break the slot machine (or go broke), so wait a bit! Wait **"
