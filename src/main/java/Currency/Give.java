@@ -29,6 +29,24 @@ public class Give extends ListenerAdapter {
         this.waiter = waiter;
     }
 
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
+
     private HashMap<User, Integer> playerTimer = new HashMap<>();
     private int o = 0;
 
@@ -41,10 +59,17 @@ public class Give extends ListenerAdapter {
 
         }
 
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+
         checkTimer();
 
         if (event.getAuthor().isBot() || !canRob(org) || org == null) {
-            if (!canRob(org) && event.getMessage().getContentRaw().contains("-give")) {
+            if (!canRob(org) && event.getMessage().getContentRaw().contains(prefix + "give")) {
                 eb.setTitle("Processing...");
                 eb.setDescription(
                         "The teller at the bank is going to be annoyed if you keep coming back to make transactions! Wait **"
@@ -62,12 +87,12 @@ public class Give extends ListenerAdapter {
                 eb.setColor(color);
                 event.getChannel().sendMessage(eb.build()).queue();
             }
-        } else if (event.getMessage().getContentRaw().contains("-give")) {
+        } else if (event.getMessage().getContentRaw().contains(prefix + "give")) {
             try {
                 String split[] = event.getMessage().getContentRaw().split("\\s+");
                 if (split.length == 1) {
                     event.getChannel()
-                            .sendMessage("Do that again, but this time put it in the format: -give [@user] [amount]")
+                            .sendMessage("Do that again, but this time put it in the format: " + prefix + "give [@user] [amount]")
                             .queue();
                 } else if (split[1].startsWith("<@") && split.length == 3) {
                     long mentionedMember = 0;
@@ -95,7 +120,7 @@ public class Give extends ListenerAdapter {
 
                 } else {
                     event.getChannel()
-                            .sendMessage("Do that again, but this time put it in the format: -give [@user] [amount]")
+                            .sendMessage("Do that again, but this time put it in the format: " + prefix + "give [@user] [amount]")
                             .queue();
                 }
 
