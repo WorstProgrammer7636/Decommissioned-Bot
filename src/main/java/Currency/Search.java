@@ -30,6 +30,24 @@ public class Search extends ListenerAdapter {
         this.waiter = waiter;
     }
 
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
+
     private HashMap<User, Integer> playerTimer = new HashMap<>();
     private int o = 0;
 
@@ -42,10 +60,17 @@ public class Search extends ListenerAdapter {
 
         }
 
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+
         checkTimer();
 
         if (event.getAuthor().isBot() || !canSearch(org) || org == null) {
-            if (!canSearch(org) && event.getMessage().getContentRaw().contains("-search")) {
+            if (!canSearch(org) && event.getMessage().getContentRaw().contains(prefix + "search")) {
                 eb.setTitle("Nothing Here!");
                 eb.setDescription("You already searched this area for money! Wait **" + playerTimer.get(org)
                         + "** seconds to walk to a new area!");
@@ -62,7 +87,7 @@ public class Search extends ListenerAdapter {
                 eb.setColor(color);
                 event.getChannel().sendMessage(eb.build()).queue();
             }
-        } else if (event.getMessage().getContentRaw().contains("-search")) {
+        } else if (event.getMessage().getContentRaw().contains(prefix + "search")) {
 
             long member = org.getIdLong();
             try {
