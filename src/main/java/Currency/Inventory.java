@@ -16,10 +16,33 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Inventory extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
 
         String[] split = event.getMessage().getContentRaw().split("\\s+");
-        if (split[0].equalsIgnoreCase("-inv") && !event.getAuthor().isBot()) {
+        if (split[0].equalsIgnoreCase(prefix + "inv") && !event.getAuthor().isBot()) {
             Guild guild = event.getGuild();
             int length = split.length;
             if (length >= 2) {
