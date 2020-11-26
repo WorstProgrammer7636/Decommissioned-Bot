@@ -1,7 +1,11 @@
 package commands;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -15,11 +19,34 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class TempMute extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
     public void onMessageReceived(MessageReceivedEvent event) {
         Message message = event.getMessage();
         String content = message.getContentRaw();
         MessageChannel channel = event.getChannel();
-        if (content.startsWith("-tempmute"))
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+        if (content.startsWith(prefix + "tempmute"))
             if (event.getMember().hasPermission(Permission.MANAGE_ROLES)) {
 
                 String[] spliced = content.split("\\s+");
@@ -70,14 +97,14 @@ public class TempMute extends ListenerAdapter {
 
                             } catch (NumberFormatException e) {
                                 channel.sendMessage(
-                                        "Can you use the command correctly PLEASE? Just do -mute @<user> [time in minutes][reason]! SIMPLE!")
+                                        "Can you use the command correctly PLEASE? Just do " + prefix + "tempmute @<user> [time in minutes][reason]! SIMPLE!")
                                         .queue();
 
                             }
 
                         } else {
                             channel.sendMessage(
-                                    "Can you use the command correctly PLEASE? Just do -mute @<user> [time in minutes][reason]! SIMPLE!")
+                                    "Can you use the command correctly PLEASE? Just do " + prefix + "tempmute @<user> [time in minutes][reason]! SIMPLE!")
                                     .queue();
 
                         }
@@ -129,21 +156,21 @@ public class TempMute extends ListenerAdapter {
 
                             } catch (NumberFormatException e) {
                                 channel.sendMessage(
-                                        "Can you use the command correctly PLEASE? Just do -mute @<user> [time in minutes][reason]! SIMPLE!")
+                                        "Can you use the command correctly PLEASE? Just do " + prefix + "tempmute @<user> [time in minutes][reason]! SIMPLE!")
                                         .queue();
 
                             }
 
                         } else {
                             channel.sendMessage(
-                                    "Can you use the command correctly PLEASE? Just do -tempmute @<user> [time in minutes][reason]! SIMPLE!")
+                                    "Can you use the command correctly PLEASE? Just do " + prefix + "tempmute @<user> [time in minutes][reason]! SIMPLE!")
                                     .queue();
                         }
 
                     }
                 } else {
                     channel.sendMessage(
-                            "Can you use the command correctly PLEASE? Just do -tempmute @<user> [time in minutes][reason]! SIMPLE!")
+                            "Can you use the command correctly PLEASE? Just do " + prefix + "tempmute @<user> [time in minutes][reason]! SIMPLE!")
                             .queue();
                 }
             } else {
