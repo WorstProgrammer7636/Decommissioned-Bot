@@ -29,6 +29,24 @@ public class Rob extends ListenerAdapter {
         this.waiter = waiter;
     }
 
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
+
     private HashMap<User, Integer> playerTimer = new HashMap<>();
     private int o = 0;
 
@@ -41,11 +59,18 @@ public class Rob extends ListenerAdapter {
 
         }
 
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
+
         checkTimer();
 
         if (event.getAuthor().isBot() || !canRob(org) || org == null) {
-            if (!canRob(org) && (event.getMessage().getContentRaw().contains("-rob")
-                    || event.getMessage().getContentRaw().contains("-steal"))) {
+            if (!canRob(org) && (event.getMessage().getContentRaw().contains(prefix + "rob")
+                    || event.getMessage().getContentRaw().contains(prefix + "steal"))) {
                 eb.setTitle("What is your plan?");
                 eb.setDescription("Dude, if you are going to rob someone, at least make a plan! Wait **"
                         + playerTimer.get(org) + "** seconds to rob again!");
@@ -62,8 +87,8 @@ public class Rob extends ListenerAdapter {
                 eb.setColor(color);
                 event.getChannel().sendMessage(eb.build()).queue();
             }
-        } else if (event.getMessage().getContentRaw().contains("-rob")
-                || event.getMessage().getContentRaw().contains("-steal")) {
+        } else if (event.getMessage().getContentRaw().contains(prefix + "rob")
+                || event.getMessage().getContentRaw().contains(prefix + "steal")) {
             try {
                 String split[] = event.getMessage().getContentRaw().split("\\s+");
                 if (split.length == 1) {
