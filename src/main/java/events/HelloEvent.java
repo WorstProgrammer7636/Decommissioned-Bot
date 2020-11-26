@@ -46,17 +46,27 @@ public class HelloEvent extends ListenerAdapter {
                             + "server's role hierarchy! \n 3. Make sure that Inutile has access to the 'log' channel if your server has one. ",
                     false);
             if (prefix.equalsIgnoreCase("-")) {
+
                 info.addField("Custom Prefix",
                         "Your server does not have a custom prefix! This server is using the default prefix '-' \n ** To change your server's prefix, do '"
                                 + prefix
-                                + "changeprefix [newprefix]'.** \n **-info and -commands will always be usable with '-' along with any new prefixes! **",
+                                + "changeprefix [newprefix]'.** \n **-info and -commands will always be usable with '-' along with any new prefixes! " +
+                                "\nNOTE: CHANGING PREFIXES DOES NOT WORK YET. THIS FEATURE WILL BE FINISHED AND ADDED SOON!**",
+                        false);
+
+
+                info.addField("Custom Prefixes",
+                                "\nNOTE: CUSTOM PREFIXES ARE CURRENTLY UNDERGOING DEVELOPMENT AND WILL BE ADDED SOON**",
                         false);
             } else {
+
                 info.addField("Custom Prefix", "Your server has a custom prefix! It is '" + prefix
                                 + "' An example usage of this prefix would be \n '" + prefix
                                 + "color'. \n **To change your server's prefix, do '" + prefix
                                 + "changeprefix [newprefix]'.** \n **-info and -commands will always be usable with '-' along with any new prefixes! **",
                         false);
+
+
             }
             info.setColor(0x03a5fc);
             info.setDescription(
@@ -92,8 +102,7 @@ public class HelloEvent extends ListenerAdapter {
                     justTitle.setTitle("Normie Commands");
                     justTitle.addField("Command List",
                             "```\n " + prefix + "calculate\n " + prefix + "piglatin \n " + prefix + "info \n " + prefix
-                                    + "rickroll \n " + prefix + "translate \n " + prefix + "meme \n " + prefix
-                                    + "color```",
+                                    + "rickroll \n " + prefix + "translate \n " + prefix + "meme \n " + prefix + "av```",
                             false);
                     justTitle.setFooter("To further see what a command does, just type it in");
                     event.getChannel().sendMessage(justTitle.build()).queue();
