@@ -30,6 +30,24 @@ public class CurrencySystem extends ListenerAdapter {
         this.waiter = waiter;
     }
 
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
+
     private HashMap<User, Integer> playerTimer = new HashMap<>();
     private int o = 0;
 
@@ -42,11 +60,17 @@ public class CurrencySystem extends ListenerAdapter {
         } catch (NullPointerException e) {
 
         }
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
 
         checkTimer();
 
         if (event.getAuthor().isBot() || !canGetMoney(org) || org == null) {
-            if (!canGetMoney(org) && event.getMessage().getContentRaw().equalsIgnoreCase("-beg")) {
+            if (!canGetMoney(org) && event.getMessage().getContentRaw().equalsIgnoreCase(prefix + "beg")) {
                 eb.setTitle("Stop Begging!");
                 eb.setDescription("Dude, if you keep begging, someone is going to harass you. Wait **"
                         + playerTimer.get(org) + "** seconds.");
@@ -63,7 +87,7 @@ public class CurrencySystem extends ListenerAdapter {
                 eb.setColor(color);
                 event.getChannel().sendMessage(eb.build()).queue();
             }
-        } else if (event.getMessage().getContentRaw().equalsIgnoreCase("-beg")) {
+        } else if (event.getMessage().getContentRaw().equalsIgnoreCase(prefix + "beg")) {
             try {
 
                 long member = event.getMember().getIdLong();
@@ -76,7 +100,7 @@ public class CurrencySystem extends ListenerAdapter {
         }
         // SEPERATE COMMANDS
         String[] split = event.getMessage().getContentRaw().split("\\s+");
-        if (split[0].equalsIgnoreCase("-bal")) {
+        if (split[0].equalsIgnoreCase(prefix + "bal")) {
             int length = split.length;
             if (length >= 2) {
                 boolean found = false;
