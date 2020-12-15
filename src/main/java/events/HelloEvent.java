@@ -53,11 +53,7 @@ public class HelloEvent extends ListenerAdapter {
                                 + "changeprefix [newprefix]'.** \n **-info and -commands will always be usable with '-' along with any new prefixes! " +
                                 "\nNOTE: CHANGING PREFIXES DOES NOT WORK YET. THIS FEATURE WILL BE FINISHED AND ADDED SOON!**",
                         false);
-
-
-                info.addField("Custom Prefixes",
-                                "\nNOTE: CUSTOM PREFIXES ARE CURRENTLY UNDERGOING DEVELOPMENT AND WILL BE ADDED SOON**",
-                        false);
+                
             } else {
 
                 info.addField("Custom Prefix", "Your server has a custom prefix! It is '" + prefix
