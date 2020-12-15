@@ -42,7 +42,7 @@ public class Calculate extends ListenerAdapter {
 
         if (message[0].equalsIgnoreCase(prefix + "calculate") && message.length == 1){
             event.getChannel().sendMessage("To use this command, type(without brackets): " + prefix + "calculate " +
-                    "[add/sub/mult/divide/exp/sqrt/log/ln] [appropriate number(s)]").queue();
+                    "[add/sub/mult/divide/exp/sqrt/log/ln/sin/cos/tan] [appropriate number(s)]").queue();
         } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("add")){
 
             if (message.length == 3){
@@ -289,6 +289,60 @@ public class Calculate extends ListenerAdapter {
                 event.getChannel().sendMessage("The answer is " + realAnswer).queue();
             } catch (ArrayIndexOutOfBoundsException e){
                 event.getChannel().sendMessage("Can you tell me the number you want me to use? Type in the format: " + prefix + "calculate sin [number]").queue();
+                return;
+            } catch (NumberFormatException e){
+                event.getChannel().sendMessage("Please type only numbers.").queue();
+                return;
+            }
+
+
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("cos")){
+
+            if (message.length > 3){
+                event.getChannel().sendMessage("Please type only one number after ln").queue();
+                return;
+            }
+
+            try{
+                double number = Double.parseDouble(message[2]);
+                double radians = Math.toRadians(number);
+                double answer = Math.cos(radians);
+                double realAnswer = format(answer);
+
+                if (Double.isInfinite(number)){
+                    event.getChannel().sendMessage("The numbers you entered were too big,").queue();
+                    return;
+                }
+                event.getChannel().sendMessage("The answer is " + realAnswer).queue();
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("Can you tell me the number you want me to use? Type in the format: " + prefix + "calculate cos [number]").queue();
+                return;
+            } catch (NumberFormatException e){
+                event.getChannel().sendMessage("Please type only numbers.").queue();
+                return;
+            }
+
+
+        } else if (message[0].equalsIgnoreCase(prefix + "calculate") && message[1].equalsIgnoreCase("tan")){
+
+            if (message.length > 3){
+                event.getChannel().sendMessage("Please type only one number after ln").queue();
+                return;
+            }
+
+            try{
+                double number = Double.parseDouble(message[2]);
+                double radians = Math.toRadians(number);
+                double answer = Math.tan(radians);
+                double realAnswer = format(answer);
+
+                if (Double.isInfinite(number)){
+                    event.getChannel().sendMessage("The numbers you entered were too big,").queue();
+                    return;
+                }
+                event.getChannel().sendMessage("The answer is " + realAnswer).queue();
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("Can you tell me the number you want me to use? Type in the format: " + prefix + "calculate tan [number]").queue();
                 return;
             } catch (NumberFormatException e){
                 event.getChannel().sendMessage("Please type only numbers.").queue();
