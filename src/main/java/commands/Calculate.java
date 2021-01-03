@@ -206,6 +206,7 @@ public class Calculate extends ListenerAdapter {
                 double number = Double.parseDouble(message[3]);
 
                 double answer = (Math.log(number)) / Math.log(base);
+                double realAnswer = format(answer);
 
                 //error cases
                 if (base == 1 && number >= 1){
@@ -229,7 +230,7 @@ public class Calculate extends ListenerAdapter {
                 }
 
 
-                event.getChannel().sendMessage("The answer is " + answer).queue();
+                event.getChannel().sendMessage("The answer is " + realAnswer).queue();
             } catch (ArrayIndexOutOfBoundsException e){
                 event.getChannel().sendMessage("Can you tell me the number you want me to log? Type in the format: " + prefix + "calculate log [base][logNumber]").queue();
                 return;
