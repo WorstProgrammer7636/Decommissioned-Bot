@@ -3,17 +3,50 @@ package commands;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-//ORIGINAL SOURCE: UCSD(University of California San Diego) CSE ASSIGNMENT
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
 public class Pinwheel extends ListenerAdapter {
+    public String prefix(long id) throws NumberFormatException, IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader("/Users/5kyle/IdeaProjects/KekBot/GuildData(Ignore)/Prefixes"));
+        StringTokenizer st = null;
+        String line;
+        while ((line = br.readLine()) != null) {
+            st = new StringTokenizer(line);
+            if (id == Long.parseLong(st.nextToken())) {
+                br.close();
+                String prefix = st.nextToken();
+
+                return prefix;
+            }
+        }
+        br.close();
+        return "ERROR";
+    }
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event){
+        String prefix = "";
+        try {
+            prefix = prefix(event.getGuild().getIdLong());
+        } catch (NumberFormatException | IOException f) {
+            f.printStackTrace();
+        }
         String[] message = event.getMessage().getContentRaw().split(" ");
         if (event.getAuthor().isBot()){
             return;
         }
 
+        if (message[0].equalsIgnoreCase(prefix + "pinwheel") && message.length == 1){
+            event.getChannel().sendMessage("To generate a shitty somewhat random sculpture, " +
+                    "please type in the format: -pinwheel [even number between 4 and 50] [first char] [second char]").queue();
+            return;
+        }
 
-        if (message[0].equalsIgnoreCase("-Pinwheel")){
+
+        if (message[0].equalsIgnoreCase(prefix + "Pinwheel")){
             int size = 0;
             // takes size and checks if it is a valid integer
             try {
@@ -62,9 +95,13 @@ public class Pinwheel extends ListenerAdapter {
                 event.getChannel().sendMessageFormat(PA4Strings.CHAR_RANGE_ERR, PA4Strings.UPWARD_CHAR_NAME, 32, 126).queue();
                 System.exit(1);
             }
-
-            event.getChannel().sendMessageFormat(PA4Strings.CHAR_PROMPT, PA4Strings.DOWNWARD_CHAR_NAME).queue();
-            String downwardChar = message[3];
+            String downwardChar = "";
+            try {
+                downwardChar = message[3];
+            } catch (ArrayIndexOutOfBoundsException e){
+                event.getChannel().sendMessage("You didn't enter the second character to use").queue();
+                return;
+            }
 
             // checks if downward arrow character is valid
             if (downwardChar.length() != 1 && !downwardChar.equals("")) {
@@ -97,7 +134,6 @@ public class Pinwheel extends ListenerAdapter {
                 return;
             }
 
-            // instantiation
             int count = 0;
             int spaces = (size / 2) - 1;
             int row = 0;
@@ -106,9 +142,10 @@ public class Pinwheel extends ListenerAdapter {
             int downCharCounter = size - 1;
             int upperTemp = 0;
             int downTemp = 0;
-            String upSpace = "|";
+            String upSpace = "";
+            event.getChannel().sendMessage("Please give a moment for the bot to print the entire sculpture. Discord limits the amount of messages that can be sent per second and it will take" +
+                    "some time to load such a big piece of text. Know that it will print in separated sections so don't worry if a part of your sculpture is missing for a few seconds!").queue();
             // form the upper half of the wheel
-            // Big O Notation Simplified: O(n^2) total.
             while (row < size / 2) {
 
                 // print first set of spaces for the row
@@ -152,10 +189,16 @@ public class Pinwheel extends ListenerAdapter {
                 downCharCounter -= 2;
                 spaces -= 1;
                 row++;
-                upSpace = "|";
             }
 
-            upSpace = "|";
+            upperTemp = 0;
+            downTemp = 0;
+            row = 0;
+            upperCharCounter = 1;
+            downCharCounter = size - 1;
+            spaces = 0;
+            spaceCounter = 0;
+
             while (row < size / 2) {
 
                 // print first set of spaces for the row
@@ -198,7 +241,6 @@ public class Pinwheel extends ListenerAdapter {
                 downCharCounter -= 2;
                 spaces++;
                 row++;
-                upSpace = "|";
             }
 
         }
