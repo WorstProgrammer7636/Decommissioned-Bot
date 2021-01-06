@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.StringTokenizer;
 
 public class Pinwheel extends ListenerAdapter {
@@ -74,13 +75,10 @@ public class Pinwheel extends ListenerAdapter {
                     return;
                 }
             } catch (ArrayIndexOutOfBoundsException e){
-                event.getChannel().sendMessageFormat(PA4Strings.SINGLE_CHAR_ERR, PA4Strings.UPWARD_CHAR_NAME).queue();
+                event.getChannel().sendMessageFormat("You did not enter characters to be used").queue();
+                return;
             }
 
-            // sets upward triangle default value
-            if (message[2].equals("")) {
-                message[2] = "@";
-            }
 
             boolean charValidity = false;
             char x = message[2].charAt(0);
@@ -95,11 +93,13 @@ public class Pinwheel extends ListenerAdapter {
                 event.getChannel().sendMessageFormat(PA4Strings.CHAR_RANGE_ERR, PA4Strings.UPWARD_CHAR_NAME, 32, 126).queue();
                 System.exit(1);
             }
+            
+
             String downwardChar = "";
             try {
                 downwardChar = message[3];
             } catch (ArrayIndexOutOfBoundsException e){
-                event.getChannel().sendMessage("You didn't enter the second character to use").queue();
+                event.getChannel().sendMessage("Please enter a second character to be used").queue();
                 return;
             }
 
@@ -142,9 +142,11 @@ public class Pinwheel extends ListenerAdapter {
             int downCharCounter = size - 1;
             int upperTemp = 0;
             int downTemp = 0;
-            String upSpace = "";
-            event.getChannel().sendMessage("Please give a moment for the bot to print the entire sculpture. Discord limits the amount of messages that can be sent per second and it will take" +
-                    "some time to load such a big piece of text. Know that it will print in separated sections so don't worry if a part of your sculpture is missing for a few seconds!").queue();
+            String upSpace = "|";
+
+            event.getChannel().sendMessage("Your product is printing! Your product will be printed in separate parts if it is large because Discord limits the amount of content that can be " +
+                    "sent per second. You will receive a message indicating that your product has been fully printed once finished.").queue();
+
             // form the upper half of the wheel
             while (row < size / 2) {
 
@@ -189,6 +191,7 @@ public class Pinwheel extends ListenerAdapter {
                 downCharCounter -= 2;
                 spaces -= 1;
                 row++;
+                upSpace = "|";
             }
 
             upperTemp = 0;
@@ -241,7 +244,10 @@ public class Pinwheel extends ListenerAdapter {
                 downCharCounter -= 2;
                 spaces++;
                 row++;
+                upSpace = "|";
             }
+
+            event.getChannel().sendMessage("Your product has finished printing!").queue();
 
         }
     }
