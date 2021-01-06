@@ -42,7 +42,8 @@ public class Pinwheel extends ListenerAdapter {
 
         if (message[0].equalsIgnoreCase(prefix + "pinwheel") && message.length == 1){
             event.getChannel().sendMessage("To generate a shitty somewhat random sculpture, " +
-                    "please type in the format: -pinwheel [even number between 4 and 50] [first char] [second char]").queue();
+                    "please type in the format: -pinwheel [even number between 4 and 50] [first char] [second char]. Note that if you put in more characters than the amount of characters your " +
+                    "monitor can fit per line, the sculpture will not be correctly printed to your desired view.").queue();
             return;
         }
 
@@ -93,7 +94,7 @@ public class Pinwheel extends ListenerAdapter {
                 event.getChannel().sendMessageFormat(PA4Strings.CHAR_RANGE_ERR, PA4Strings.UPWARD_CHAR_NAME, 32, 126).queue();
                 System.exit(1);
             }
-            
+
 
             String downwardChar = "";
             try {
